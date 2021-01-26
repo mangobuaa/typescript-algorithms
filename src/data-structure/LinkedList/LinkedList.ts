@@ -3,7 +3,7 @@ import { LinkedNode } from "./LinkedNode";
 
 export class LinkedList<T> {
     private head: LinkedNode<T> = null;
-    public size: number = 0;
+    private size: number = 0;
     private comparator: Comparator<T>;
 
     constructor (compareFunc?: CompareFunction<T>) {
@@ -31,6 +31,7 @@ export class LinkedList<T> {
             const prev = this.node(index - 1);
             prev.next = new LinkedNode(elememt, prev.next);
         }
+        this.size++;
         return this;
     }
 
@@ -61,6 +62,7 @@ export class LinkedList<T> {
     public delete (index: number) {
         let deletedNode: LinkedNode<T> = null;
         if (index === 0) {
+            this.rangeCheck(index);
             deletedNode = this.head;
             this.head = this.head.next;
             return deletedNode.element;
@@ -84,10 +86,21 @@ export class LinkedList<T> {
      * @param index 位置索引
      */
     private node (index: number) {
+        this.rangeCheck(index);
         let node = this.head;
         while (index-- > 0) {
             node = node.next;
         }
         return node;
+    }
+
+    /**
+     * 检查索引是否超过链表范围
+     * @param index 位置索引
+     */
+    private rangeCheck (index: number) {
+        if (index < 0 || index >= this.size) {
+            throw new Error(`索引${index}超出范围`);
+        }
     }
 }
