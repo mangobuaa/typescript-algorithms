@@ -15,6 +15,7 @@ export class LinkedList<T> {
      * @param element 元素
      */
     public add (element: T) {
+        this.insert(this.size, element);
         return this;
     }
 
@@ -24,6 +25,12 @@ export class LinkedList<T> {
      * @param elememt 元素
      */
     public insert(index: number, elememt: T) {
+        if (index === 0) {
+            this.head = new LinkedNode(elememt, this.head);
+        } else {
+            const prev = this.node(index - 1);
+            prev.next = new LinkedNode(elememt, prev.next);
+        }
         return this;
     }
 
@@ -32,16 +39,37 @@ export class LinkedList<T> {
      * @param index 位置索引
      */
     public get(index: number) {
-        return this.head;
+        return this.node(index).element;
     }
 
     /**
-     * 修改特定位置的元素
+     * 修改特定位置的元素，并返回旧的元素
      * @param index 位置索引
      * @param element 元素
      */
     public set(index: number, element: T) {
-        return ;
+        const node = this.node(index);
+        const oldElement = node.element;
+        node.element = element;
+        return oldElement;
+    }
+
+    /**
+     * 根据位置，删除元素，并返回被删除的元素
+     * @param index 位置索引
+     */
+    public delete (index: number) {
+        let deletedNode: LinkedNode<T> = null;
+        if (index === 0) {
+            deletedNode = this.head;
+            this.head = this.head.next;
+            return deletedNode.element;
+        }
+        const prev = this.node(index-1);
+        deletedNode = prev.next;
+        prev.next = prev.next.next;
+
+        return deletedNode.element;
     }
 
     /**
@@ -51,5 +79,15 @@ export class LinkedList<T> {
         return this.size;
     }
 
-
+    /**
+     * 根据位置，获取链表节点
+     * @param index 位置索引
+     */
+    private node (index: number) {
+        let node = this.head;
+        while (index-- > 0) {
+            node = node.next;
+        }
+        return node;
+    }
 }
