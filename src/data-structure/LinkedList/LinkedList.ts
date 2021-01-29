@@ -2,6 +2,8 @@ import { Comparator, CompareFunction } from "../../utils/Comparator";
 import { LinkedNode } from "./LinkedNode";
 
 export class LinkedList<T> {
+    public static readonly NOT_FOUND_INDEX = -1;
+
     private head: LinkedNode<T> = null;
     private size: number = 0;
     private comparator: Comparator<T>;
@@ -72,6 +74,23 @@ export class LinkedList<T> {
         prev.next = prev.next.next;
 
         return deletedNode.element;
+    }
+
+    /**
+     * 根据元素查找所在链表中的位置
+     * @param element 待查找元素
+     */
+    public indexOf (element: T): number {
+        let node = this.head;
+        let index = 0;
+        while (node) {
+            if (this.comparator.equal(node.element, element)) {
+                return index;
+            }
+            node = node.next;
+            index++;
+        }
+        return LinkedList.NOT_FOUND_INDEX;
     }
 
     /**
