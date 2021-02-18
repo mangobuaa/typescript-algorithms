@@ -7,12 +7,12 @@ export type CompareFunction<T> = (a: T, b:T ) => CompareType;
 
 export class Comparator<T> {
     private compareFn: CompareFunction<T>;
-    constructor (compareFunc: CompareFunction<T>) {
+    constructor (compareFunc?: CompareFunction<T>) {
         this.compareFn = compareFunc || Comparator.defaultCompareFunction;
     }
 
     private static defaultCompareFunction<T> (a: T, b: T) {
-        if (a === b) return CompareType.LESSER; 
+        if (a === b) return CompareType.EQUAL; 
         return a > b ? CompareType.GREATER : CompareType.LESSER; 
     }
 
